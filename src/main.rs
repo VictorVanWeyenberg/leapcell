@@ -12,5 +12,6 @@ async fn main() {
 }
 
 async fn root() -> &'static str {
+    println!("Root called");
     "Hello World"
 }
