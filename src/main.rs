@@ -43,7 +43,7 @@ fn connection_info() -> ConnectionInfo {
 }
 
 async fn save() -> Result<&'static str, String> {
-    save_redis().map_err(|err| err.category().to_string())
+    save_redis().map_err(|err| format!("{}", err))
 }
 
 fn save_redis() -> RedisResult<&'static str> {
@@ -56,7 +56,7 @@ fn save_redis() -> RedisResult<&'static str> {
 }
 
 async fn read() -> Result<String, String> {
-    read_redis().map_err(|err| err.category().to_string())
+    read_redis().map_err(|err| format!("{}", err))
 }
 
 fn read_redis() -> RedisResult<String> {
