@@ -1,0 +1,9 @@
+[package]
+name = "leapcell"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+axum = "0.8.1"
+redis = "0.29.1"
+tokio = "1.44.0"
