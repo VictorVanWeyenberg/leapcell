@@ -1,7 +1,7 @@
 use axum::routing::get;
 use axum::Router;
 use chrono::Utc;
-use redis::{Commands, RedisResult};
+use redis::{Commands, ConnectionAddr, ConnectionInfo, ProtocolVersion, RedisConnectionInfo, RedisResult};
 use std::env;
 use tokio::net::TcpListener;
 
@@ -24,14 +24,30 @@ async fn root() -> &'static str {
     "Hello World"
 }
 
+fn connection_info() -> ConnectionInfo {
+    let password = env::var("REDIS_PASSWORD").unwrap();
+    ConnectionInfo {
+        addr: ConnectionAddr::TcpTls {
+            host: "leapcell-wsjm-jigi-424512.leapcell.cloud".to_string(),
+            port: 6379,
+            insecure: false,
+            tls_params: None,
+        },
+        redis: RedisConnectionInfo {
+            db: 0,
+            username: Some("default".to_string()),
+            password: Some(password),
+            protocol: ProtocolVersion::RESP3,
+        },
+    }
+}
+
 async fn save() -> Result<&'static str, String> {
     save_redis().map_err(|err| err.category().to_string())
 }
 
 fn save_redis() -> RedisResult<&'static str> {
-    let password = env::var("REDIS_PASSWORD").unwrap();
-    let endpoint = format!("redis://default:{}@leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
-    let client = redis::Client::open(endpoint)?;
+    let client = redis::Client::open(connection_info())?;
 
     let mut connection = client.get_connection()?;
 
@@ -44,9 +60,7 @@ async fn read() -> Result<String, String> {
 }
 
 fn read_redis() -> RedisResult<String> {
-    let password = env::var("REDIS_PASSWORD").unwrap();
-    let endpoint = format!("redis://default:{}@leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
-    let client = redis::Client::open(endpoint)?;
+    let client = redis::Client::open(connection_info())?;
 
     let mut connection = client.get_connection()?;
 
