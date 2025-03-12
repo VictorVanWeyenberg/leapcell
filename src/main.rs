@@ -30,7 +30,7 @@ async fn save() -> Result<&'static str, String> {
 
 fn save_redis() -> RedisResult<&'static str> {
     let password = env::var("REDIS_PASSWORD").unwrap();
-    let endpoint = format!("rediss://default:{}leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
+    let endpoint = format!("redis://default:{}@leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
     let client = redis::Client::open(endpoint)?;
 
     let mut connection = client.get_connection()?;
@@ -45,7 +45,7 @@ async fn read() -> Result<String, String> {
 
 fn read_redis() -> RedisResult<String> {
     let password = env::var("REDIS_PASSWORD").unwrap();
-    let endpoint = format!("rediss://default:{}leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
+    let endpoint = format!("rediss://default:{}@leapcell-wsjm-jigi-424512.leapcell.cloud:6379", password);
     let client = redis::Client::open(endpoint)?;
 
     let mut connection = client.get_connection()?;
