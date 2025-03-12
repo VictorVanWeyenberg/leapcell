@@ -6,7 +6,6 @@ use std::env;
 use tokio::net::TcpListener;
 
 const KEY: &str = "last_saved";
-const REDIS: &str = "rediss://default:{}leapcell-wsjm-jigi-424512.leapcell.cloud:6379";
 
 #[tokio::main]
 async fn main() {
@@ -52,7 +51,7 @@ fn save_redis() -> RedisResult<&'static str> {
     let mut connection = client.get_connection()?;
 
     connection.set(KEY, Utc::now().to_rfc3339())
-        .map(|ok: ()| "OK")
+        .map(|_: ()| "OK")
 }
 
 async fn read() -> Result<String, String> {
